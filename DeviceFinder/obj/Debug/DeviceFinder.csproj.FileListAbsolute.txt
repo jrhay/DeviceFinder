@@ -1,0 +1,11 @@
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\bin\Debug\DeviceFinder.exe.config
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\bin\Debug\DeviceFinder.exe
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\bin\Debug\DeviceFinder.pdb
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\bin\Debug\DeviceManager.dll
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\bin\Debug\DeviceManager.pdb
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.csprojResolveAssemblyReference.cache
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.Form1.resources
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.Properties.Resources.resources
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.csproj.GenerateResource.Cache
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.exe
+C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceFinder\obj\Debug\DeviceFinder.pdb
