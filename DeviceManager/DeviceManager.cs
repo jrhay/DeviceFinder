@@ -222,38 +222,40 @@ namespace DeviceManager
     public static class DeviceManager
     {
         /// <summary>
+        /// Get a list of all currently-connected USB devices.  Calls GetDevices()
+        /// </summary>
+        /// <returns>List of all found devices</returns>
+        static public List<DeviceInfo> GetConnectedUSBDevices()
+        {
+            return GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE, true);
+        }
+
+        static public List<DeviceInfo> GetConnectedHIDDevices()
+        {
+            return GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_HID, true);
+        }
+
+        /// <summary>
         /// Get a list of all known devices of a given class, optionally only selecting devices 
         /// that are physically present at the time of the call.
         /// 
         /// Throws a System.ComponentModel.Win32Exception on any Windows API error
         /// </summary>
         /// <param name="DeviceClassGUID">GUID of device class to enumerate.  May be a value from
-        /// GUID_DEVCLASS, any other known device class GUID, or Guid.Empty to find all USB devices.</param>
-        /// <param name="DeviceInterfaceGUID">GUID of the device interface type to enumerate.  May be a
-        /// value from GUID_DEVINTERFACE (or another known device interface GUID), or Guid.Empty to find
-        /// all devices regardless of interface type.</param>
+        /// GUID_DEVINTERFACE, any other known device class GUID, or Guid.Empty to find all USB devices.</param>
         /// <param name="Present">TRUE if only present (conencted) devices should be returned</param>
         /// <returns>List of all found devices</returns>
-        static public List<DeviceInfo> GetDevices(Guid DeviceClassGUID, Guid DeviceInterfaceGUID, Boolean Present)
+        static public List<DeviceInfo> GetDevices(Guid DeviceClassGUID, Boolean Present = true)
         {
             List<DeviceInfo> Devices = new List<DeviceInfo>();
+            if (DeviceClassGUID == Guid.Empty)
+                DeviceClassGUID = GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE;
 
             int Flags = (Present ? (int)SetupAPI.DiGetClassFlags.DIGCF_PRESENT : 0);
             IntPtr deviceList = IntPtr.Zero;
-
-            // Get the root of the device tree for the kinds of devices we
-            // are interested in
-            if (DeviceClassGUID == Guid.Empty)
-            {
-                Flags = Flags | (int)SetupAPI.DiGetClassFlags.DIGCF_ALLCLASSES;
-                deviceList = SetupAPI.SetupDiGetClassDevs(IntPtr.Zero, "", IntPtr.Zero, Flags);
-            }
-            else
-            {
-                Flags = Flags | (int)SetupAPI.DiGetClassFlags.DIGCF_DEVICEINTERFACE;
-                deviceList = SetupAPI.SetupDiGetClassDevs(ref DeviceClassGUID, IntPtr.Zero, IntPtr.Zero, Flags);
-            }
-
+            Flags = Flags | (int)SetupAPI.DiGetClassFlags.DIGCF_DEVICEINTERFACE;
+            deviceList = SetupAPI.SetupDiGetClassDevs(ref DeviceClassGUID, IntPtr.Zero, IntPtr.Zero, Flags);
+            
             if (deviceList.ToInt64() == SetupAPI.INVALID_HANDLE_VALUE)
                 throw new Win32Exception();
 
@@ -263,8 +265,6 @@ namespace DeviceManager
             uint DeviceIndex = 0;
             while (SetupAPI.SetupDiEnumDeviceInfo(deviceList, DeviceIndex, ref DevInfo))
             {
-                DevInfo.cbSize = (uint)Marshal.SizeOf(DevInfo); // Just to be sure; might have been reset
-                
                 String DevID = SetupAPI.GetDeviceID(DevInfo);
                 if (String.IsNullOrEmpty(DevID))
                     throw new Win32Exception();
@@ -282,33 +282,11 @@ namespace DeviceManager
                     Info.Path = SetupAPI.GetDeviceID(IntInfo);
 
                     Devices.Add(Info);
-
                     InterfaceIndex++;
                 }
 
                 DeviceIndex++;
             }
-
-/*
-                    SetupAPI.SP_DEVINFO_DATA DevData = new SetupAPI.SP_DEVINFO_DATA();
-                    DevData.cbSize = (uint)Marshal.SizeOf(DevData);
-
-                    SetupAPI.SP_DEVICE_INTERFACE_DETAIL_DATA DevDetail = new SetupAPI.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                    if (IntPtr.Size == 8)
-                        DevDetail.cbSize = 8;//Marshal.SizeOf(typeof(SetupAPI.SP_DEVICE_INTERFACE_DETAIL_DATA));
-                    else
-                        DevDetail.cbSize = 4 + Marshal.SystemDefaultCharSize;
-
-                    //uint requiredSize = 0;
-                    //uint nBytes = SetupAPI.BUFFER_SIZE;
-                    if (SetupAPI.SetupDiGetDeviceInterfaceDetail(deviceList, ref DevInfo, ref DevDetail, (uint)DevDetail.cbSize, IntPtr.Zero, ref DevData))
-                    {
-                    }
-                    else
-                    {
-                        throw new Win32Exception();
-                    }
- * */
 
             return Devices;
         }

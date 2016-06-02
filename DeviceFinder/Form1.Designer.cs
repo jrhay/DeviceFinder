@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listDevices = new System.Windows.Forms.ListView();
+            this.listDevices = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // listDevices
             // 
+            this.listDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listDevices.FormattingEnabled = true;
             this.listDevices.Location = new System.Drawing.Point(12, 12);
             this.listDevices.Name = "listDevices";
-            this.listDevices.Size = new System.Drawing.Size(548, 237);
+            this.listDevices.Size = new System.Drawing.Size(548, 225);
             this.listDevices.TabIndex = 0;
-            this.listDevices.UseCompatibleStateImageBehavior = false;
             // 
             // Form1
             // 
@@ -53,7 +56,8 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listDevices;
+        private System.Windows.Forms.ListBox listDevices;
+
     }
 }
 

@@ -23,8 +23,8 @@ namespace DeviceFinder
 
         void PopulateDeviceList()
         {
-            List<DeviceInfo> devices = DeviceManager.DeviceManager.GetDevices(DeviceManager.GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE, Guid.Empty, true);
-            listDevices.Clear();
+            List<DeviceInfo> devices = DeviceManager.DeviceManager.GetConnectedHIDDevices();
+            listDevices.Items.Clear();
             foreach (DeviceInfo device in devices)
             {
                 listDevices.Items.Add(device.Path);
