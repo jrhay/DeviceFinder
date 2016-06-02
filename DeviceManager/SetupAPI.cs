@@ -102,6 +102,44 @@ namespace DeviceManager
             return DeviceID;
         }
 
+        #endregion
+
+        #region Device Registry Properties
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern bool SetupDiGetDeviceRegistryProperty(
+            IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, uint Property, out UInt32 PropertyRegDataType,
+            IntPtr PropertyBuffer, uint PropertyBufferSize, out uint RequiredSize);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern bool SetupDiGetDeviceRegistryProperty(
+            IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, uint Property, out UInt32 PropertyRegDataType,
+            IntPtr PropertyBuffer, uint PropertyBufferSize, IntPtr RequiredSize);
+
+        /// <summary>
+        /// Attempt to return a property value for a specific device
+        /// </summary>
+        /// <param name="deviceList">Device List containing the device</param>
+        /// <param name="DevInfo">Device Info Structure</param>
+        /// <param name="Property">Property to obtain, one of the SPDRP_ values</param>
+        /// <returns>Property value as a string (if applicable), or null</returns>
+        public static String GetDevicePropertyString(IntPtr deviceList, SP_DEVINFO_DATA DevInfo, uint Property)
+        {
+            UInt32 PropertyDataType;
+
+            uint numBytes;
+            SetupDiGetDeviceRegistryProperty(deviceList, ref DevInfo, Property, out PropertyDataType, IntPtr.Zero, 0, out numBytes);
+            if (numBytes > 0)
+            {
+                IntPtr propertyBuffer = Marshal.AllocHGlobal((int)numBytes);
+                SetupDiGetDeviceRegistryProperty(deviceList, ref DevInfo, Property, out PropertyDataType, propertyBuffer, numBytes, IntPtr.Zero);
+                String PropertyValue = Marshal.PtrToStringAuto(propertyBuffer);
+                Marshal.FreeHGlobal(propertyBuffer);
+                return PropertyValue;
+            }
+
+            return null;
+        }
 
         #endregion
 
@@ -127,6 +165,13 @@ namespace DeviceManager
            UInt32 memberIndex,
            ref SP_DEVINFO_DATA deviceInterfaceData
         );
+
+        #endregion
+
+        #region Memory Cleanup
+        
+        [DllImport("setupapi.dll", SetLastError = true)]
+        public static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
 
         #endregion
     }

@@ -211,12 +211,214 @@ namespace DeviceManager
 
     #endregion
 
-    public struct DeviceInfo
+    #region Device Registry Property Codes
+
+    /// <summary>
+    /// Device registry property codes
+    /// </summary>
+    public enum SPDRP : uint
     {
-        public Guid ClassGUID;
-        public Guid InterfaceGUID;
-        public uint Instance;
-        public String Path;
+        /// <summary>
+        /// DeviceDesc (R/W)
+        /// </summary>
+        SPDRP_DEVICEDESC = 0x00000000,
+
+        /// <summary>
+        /// HardwareID (R/W)
+        /// </summary>
+        SPDRP_HARDWAREID = 0x00000001,
+
+        /// <summary>
+        /// CompatibleIDs (R/W)
+        /// </summary>
+        SPDRP_COMPATIBLEIDS = 0x00000002,
+
+        /// <summary>
+        /// unused
+        /// </summary>
+        SPDRP_UNUSED0 = 0x00000003,
+
+        /// <summary>
+        /// Service (R/W)
+        /// </summary>
+        SPDRP_SERVICE = 0x00000004,
+
+        /// <summary>
+        /// unused
+        /// </summary>
+        SPDRP_UNUSED1 = 0x00000005,
+
+        /// <summary>
+        /// unused
+        /// </summary>
+        SPDRP_UNUSED2 = 0x00000006,
+
+        /// <summary>
+        /// Class (R--tied to ClassGUID)
+        /// </summary>
+        SPDRP_CLASS = 0x00000007,
+
+        /// <summary>
+        /// ClassGUID (R/W)
+        /// </summary>
+        SPDRP_CLASSGUID = 0x00000008,
+
+        /// <summary>
+        /// Driver (R/W)
+        /// </summary>
+        SPDRP_DRIVER = 0x00000009,
+
+        /// <summary>
+        /// ConfigFlags (R/W)
+        /// </summary>
+        SPDRP_CONFIGFLAGS = 0x0000000A,
+
+        /// <summary>
+        /// Mfg (R/W)
+        /// </summary>
+        SPDRP_MFG = 0x0000000B,
+
+        /// <summary>
+        /// FriendlyName (R/W)
+        /// </summary>
+        SPDRP_FRIENDLYNAME = 0x0000000C,
+
+        /// <summary>
+        /// LocationInformation (R/W)
+        /// </summary>
+        SPDRP_LOCATION_INFORMATION = 0x0000000D,
+
+        /// <summary>
+        /// PhysicalDeviceObjectName (R)
+        /// </summary>
+        SPDRP_PHYSICAL_DEVICE_OBJECT_NAME = 0x0000000E,
+
+        /// <summary>
+        /// Capabilities (R)
+        /// </summary>
+        SPDRP_CAPABILITIES = 0x0000000F,
+
+        /// <summary>
+        /// UiNumber (R)
+        /// </summary>
+        SPDRP_UI_NUMBER = 0x00000010,
+
+        /// <summary>
+        /// UpperFilters (R/W)
+        /// </summary>
+        SPDRP_UPPERFILTERS = 0x00000011,
+
+        /// <summary>
+        /// LowerFilters (R/W)
+        /// </summary>
+        SPDRP_LOWERFILTERS = 0x00000012,
+
+        /// <summary>
+        /// BusTypeGUID (R)
+        /// </summary>
+        SPDRP_BUSTYPEGUID = 0x00000013,
+
+        /// <summary>
+        /// LegacyBusType (R)
+        /// </summary>
+        SPDRP_LEGACYBUSTYPE = 0x00000014,
+
+        /// <summary>
+        /// BusNumber (R)
+        /// </summary>
+        SPDRP_BUSNUMBER = 0x00000015,
+
+        /// <summary>
+        /// Enumerator Name (R)
+        /// </summary>
+        SPDRP_ENUMERATOR_NAME = 0x00000016,
+
+        /// <summary>
+        /// Security (R/W, binary form)
+        /// </summary>
+        SPDRP_SECURITY = 0x00000017,
+
+        /// <summary>
+        /// Security (W, SDS form)
+        /// </summary>
+        SPDRP_SECURITY_SDS = 0x00000018,
+
+        /// <summary>
+        /// Device Type (R/W)
+        /// </summary>
+        SPDRP_DEVTYPE = 0x00000019,
+
+        /// <summary>
+        /// Device is exclusive-access (R/W)
+        /// </summary>
+        SPDRP_EXCLUSIVE = 0x0000001A,
+
+        /// <summary>
+        /// Device Characteristics (R/W)
+        /// </summary>
+        SPDRP_CHARACTERISTICS = 0x0000001B,
+
+        /// <summary>
+        /// Device Address (R)
+        /// </summary>
+        SPDRP_ADDRESS = 0x0000001C,
+
+        /// <summary>
+        /// UiNumberDescFormat (R/W)
+        /// </summary>
+        SPDRP_UI_NUMBER_DESC_FORMAT = 0X0000001D,
+
+        /// <summary>
+        /// Device Power Data (R)
+        /// </summary>
+        SPDRP_DEVICE_POWER_DATA = 0x0000001E,
+
+        /// <summary>
+        /// Removal Policy (R)
+        /// </summary>
+        SPDRP_REMOVAL_POLICY = 0x0000001F,
+
+        /// <summary>
+        /// Hardware Removal Policy (R)
+        /// </summary>
+        SPDRP_REMOVAL_POLICY_HW_DEFAULT = 0x00000020,
+
+        /// <summary>
+        /// Removal Policy Override (RW)
+        /// </summary>
+        SPDRP_REMOVAL_POLICY_OVERRIDE = 0x00000021,
+
+        /// <summary>
+        /// Device Install State (R)
+        /// </summary>
+        SPDRP_INSTALL_STATE = 0x00000022,
+
+        /// <summary>
+        /// Device Location Paths (R)
+        /// </summary>
+        SPDRP_LOCATION_PATHS = 0x00000023,
+    }
+
+    #endregion
+
+    public class DeviceInfo
+    {
+        public String DeviceID { get; set; }
+        public Guid ClassGUID { get; set; }
+        public Guid InterfaceGUID { get; set; }
+        public uint Instance { get; set; }
+
+        public String Class { get; set; }
+
+        public String FriendlyName { get; set; }
+        public String Description { get; set; }
+
+        public String Enumerator { get; set; }
+        public String Location { get; set; }
+
+        public String Manufacturer { get; set; }
+        public String ServiceName { get; set; }
+
     }
 
     public static class DeviceManager
@@ -251,8 +453,8 @@ namespace DeviceManager
             if (DeviceClassGUID == Guid.Empty)
                 DeviceClassGUID = GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE;
 
-            int Flags = (Present ? (int)SetupAPI.DiGetClassFlags.DIGCF_PRESENT : 0);
             IntPtr deviceList = IntPtr.Zero;
+            int Flags = (Present ? (int)SetupAPI.DiGetClassFlags.DIGCF_PRESENT : 0);
             Flags = Flags | (int)SetupAPI.DiGetClassFlags.DIGCF_DEVICEINTERFACE;
             deviceList = SetupAPI.SetupDiGetClassDevs(ref DeviceClassGUID, IntPtr.Zero, IntPtr.Zero, Flags);
             
@@ -273,20 +475,36 @@ namespace DeviceManager
                 IntInfo.cbSize = (uint)Marshal.SizeOf(IntInfo);
 
                 uint InterfaceIndex = 0;
-                while (SetupAPI.SetupDiEnumDeviceInterfaces(deviceList, IntPtr.Zero, ref DeviceClassGUID, InterfaceIndex, ref IntInfo))
+                while (SetupAPI.SetupDiEnumDeviceInterfaces(deviceList, ref DevInfo, ref DeviceClassGUID, InterfaceIndex, ref IntInfo))
                 {
                     DeviceInfo Info = new DeviceInfo();
-                    Info.ClassGUID = IntInfo.classGuid;
+                    Info.DeviceID = DevID;
                     Info.InterfaceGUID = IntInfo.classGuid;
                     Info.Instance = IntInfo.devInst;
-                    Info.Path = SetupAPI.GetDeviceID(IntInfo);
+
+                    Info.Class = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_CLASS);
+                    Info.FriendlyName = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_FRIENDLYNAME);
+                    Info.Description = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_DEVICEDESC);
+ //                   throw new Win32Exception();
+
+                    Info.Enumerator= SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_ENUMERATOR_NAME);
+        Info.Location = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_LOCATION_INFORMATION);
+
+        Info.Manufacturer = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_MFG);
+        Info.ServiceName = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_SERVICE);
+
 
                     Devices.Add(Info);
                     InterfaceIndex++;
+
+                    IntInfo = new SetupAPI.SP_DEVINFO_DATA();
+                    IntInfo.cbSize = (uint)Marshal.SizeOf(IntInfo);
                 }
 
                 DeviceIndex++;
             }
+
+            SetupAPI.SetupDiDestroyDeviceInfoList(deviceList);
 
             return Devices;
         }

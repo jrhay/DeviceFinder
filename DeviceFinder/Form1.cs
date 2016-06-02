@@ -23,12 +23,19 @@ namespace DeviceFinder
 
         void PopulateDeviceList()
         {
-            List<DeviceInfo> devices = DeviceManager.DeviceManager.GetConnectedHIDDevices();
-            listDevices.Items.Clear();
-            foreach (DeviceInfo device in devices)
-            {
-                listDevices.Items.Add(device.Path);
-            }
+            List<DeviceInfo> devices = null;
+            if (chkUSBDevices.Checked)
+                devices = DeviceManager.DeviceManager.GetConnectedUSBDevices();
+            else if (chkHIDDevices.Checked)
+                devices = DeviceManager.DeviceManager.GetConnectedHIDDevices();
+
+            dataGridView1.DataSource = devices;
         }
+
+        private void chkUSBDevices_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateDeviceList();
+        }
+
     }
 }
