@@ -25,14 +25,19 @@ namespace DeviceFinder
         {
             List<DeviceInfo> devices = null;
             if (chkUSBDevices.Checked)
-                devices = DeviceManager.DeviceManager.GetConnectedUSBDevices();
+                devices = DeviceManager.Devices.GetConnectedUSBDevices(txtVID.Text, txtPID.Text);
             else if (chkHIDDevices.Checked)
-                devices = DeviceManager.DeviceManager.GetConnectedHIDDevices();
+                devices = DeviceManager.Devices.GetConnectedHIDDevices(txtVID.Text, txtPID.Text);
 
             dataGridView1.DataSource = devices;
         }
 
         private void chkUSBDevices_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateDeviceList();
+        }
+
+        private void btnScan_Click(object sender, EventArgs e)
         {
             PopulateDeviceList();
         }

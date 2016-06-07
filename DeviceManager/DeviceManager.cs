@@ -419,22 +419,63 @@ namespace DeviceManager
         public String Manufacturer { get; set; }
         public String ServiceName { get; set; }
 
+        public String VID { get; set; }
+        public String PID { get; set; }
+
+        public String Revision { get; set; }
+        public String Interface { get; set; }
+
+        #region DeviceID Parsing
+
+        public DeviceInfo(String DeviceID)
+        {
+            SetAndParseDeviceID(DeviceID);
+        }
+
+        public void SetAndParseDeviceID(String DeviceID)
+        {
+            HardwareID H = new HardwareID(DeviceID);
+            this.DeviceID = DeviceID;
+            VID = H.VID;
+            PID = H.PID;
+            Revision = H.Revision;
+            Interface = H.Interface;
+        }
+
+        #endregion
+
     }
 
-    public static class DeviceManager
+    public static class Devices
     {
         /// <summary>
         /// Get a list of all currently-connected USB devices.  Calls GetDevices()
         /// </summary>
+        /// <param name="VID">Only find USB devices with this Vendor ID</param>
+        /// <param name="PID">Only find USB devices with the given VID and this Product ID.  Ignored if VID==null</param>
         /// <returns>List of all found devices</returns>
-        static public List<DeviceInfo> GetConnectedUSBDevices()
+        static public List<DeviceInfo> GetConnectedUSBDevices(String VID = null, String PID = null)
         {
-            return GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE, true);
+            List<DeviceInfo> Devices = GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_USB_DEVICE, true);
+
+            if (String.IsNullOrEmpty(VID))
+                return Devices;
+            else if (String.IsNullOrEmpty(PID))
+                return Devices.Where(x => x.VID.Equals(VID)).ToList();
+            else
+                return Devices.Where(x => x.VID.Equals(VID) && x.PID.Equals(PID)).ToList();
         }
 
-        static public List<DeviceInfo> GetConnectedHIDDevices()
+        static public List<DeviceInfo> GetConnectedHIDDevices(String VID = null, String PID = null)
         {
-            return GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_HID, true);
+            List<DeviceInfo> Devices = GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_HID, true);
+
+            if (String.IsNullOrEmpty(VID))
+                return Devices;
+            else if (String.IsNullOrEmpty(PID))
+                return Devices.Where(x => x.VID.Equals(VID)).ToList();
+            else
+                return Devices.Where(x => x.VID.Equals(VID) && x.PID.Equals(PID)).ToList();
         }
 
         /// <summary>
@@ -477,22 +518,19 @@ namespace DeviceManager
                 uint InterfaceIndex = 0;
                 while (SetupAPI.SetupDiEnumDeviceInterfaces(deviceList, ref DevInfo, ref DeviceClassGUID, InterfaceIndex, ref IntInfo))
                 {
-                    DeviceInfo Info = new DeviceInfo();
-                    Info.DeviceID = DevID;
+                    DeviceInfo Info = new DeviceInfo(DevID);
                     Info.InterfaceGUID = IntInfo.classGuid;
                     Info.Instance = IntInfo.devInst;
 
                     Info.Class = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_CLASS);
                     Info.FriendlyName = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_FRIENDLYNAME);
                     Info.Description = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_DEVICEDESC);
- //                   throw new Win32Exception();
 
                     Info.Enumerator= SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_ENUMERATOR_NAME);
-        Info.Location = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_LOCATION_INFORMATION);
+                    Info.Location = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_LOCATION_INFORMATION);
 
-        Info.Manufacturer = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_MFG);
-        Info.ServiceName = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_SERVICE);
-
+                    Info.Manufacturer = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_MFG);
+                    Info.ServiceName = SetupAPI.GetDevicePropertyString(deviceList, DevInfo, (uint)SPDRP.SPDRP_SERVICE);
 
                     Devices.Add(Info);
                     InterfaceIndex++;

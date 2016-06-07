@@ -43,6 +43,11 @@
             this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClassGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.InterfaceGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblVID = new System.Windows.Forms.Label();
+            this.txtVID = new System.Windows.Forms.TextBox();
+            this.txtPID = new System.Windows.Forms.TextBox();
+            this.lblPID = new System.Windows.Forms.Label();
+            this.btnScan = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.grpDevices.SuspendLayout();
             this.grpDeviceType.SuspendLayout();
@@ -90,6 +95,11 @@
             // 
             this.grpDeviceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpDeviceType.Controls.Add(this.btnScan);
+            this.grpDeviceType.Controls.Add(this.txtPID);
+            this.grpDeviceType.Controls.Add(this.lblPID);
+            this.grpDeviceType.Controls.Add(this.txtVID);
+            this.grpDeviceType.Controls.Add(this.lblVID);
             this.grpDeviceType.Controls.Add(this.chkHIDDevices);
             this.grpDeviceType.Controls.Add(this.chkUSBDevices);
             this.grpDeviceType.Location = new System.Drawing.Point(12, 13);
@@ -199,6 +209,48 @@
             this.InterfaceGUID.ReadOnly = true;
             this.InterfaceGUID.Width = 210;
             // 
+            // lblVID
+            // 
+            this.lblVID.AutoSize = true;
+            this.lblVID.Location = new System.Drawing.Point(267, 18);
+            this.lblVID.Name = "lblVID";
+            this.lblVID.Size = new System.Drawing.Size(25, 13);
+            this.lblVID.TabIndex = 2;
+            this.lblVID.Text = "VID";
+            // 
+            // txtVID
+            // 
+            this.txtVID.Location = new System.Drawing.Point(298, 15);
+            this.txtVID.Name = "txtVID";
+            this.txtVID.Size = new System.Drawing.Size(47, 20);
+            this.txtVID.TabIndex = 3;
+            // 
+            // txtPID
+            // 
+            this.txtPID.Location = new System.Drawing.Point(298, 40);
+            this.txtPID.Name = "txtPID";
+            this.txtPID.Size = new System.Drawing.Size(47, 20);
+            this.txtPID.TabIndex = 5;
+            // 
+            // lblPID
+            // 
+            this.lblPID.AutoSize = true;
+            this.lblPID.Location = new System.Drawing.Point(267, 43);
+            this.lblPID.Name = "lblPID";
+            this.lblPID.Size = new System.Drawing.Size(25, 13);
+            this.lblPID.TabIndex = 4;
+            this.lblPID.Text = "PID";
+            // 
+            // btnScan
+            // 
+            this.btnScan.Location = new System.Drawing.Point(375, 26);
+            this.btnScan.Name = "btnScan";
+            this.btnScan.Size = new System.Drawing.Size(125, 23);
+            this.btnScan.TabIndex = 6;
+            this.btnScan.Text = "Scan for Devices";
+            this.btnScan.UseVisualStyleBackColor = true;
+            this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,6 +285,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Class;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClassGUID;
         private System.Windows.Forms.DataGridViewTextBoxColumn InterfaceGUID;
+        private System.Windows.Forms.Button btnScan;
+        private System.Windows.Forms.TextBox txtPID;
+        private System.Windows.Forms.Label lblPID;
+        private System.Windows.Forms.TextBox txtVID;
+        private System.Windows.Forms.Label lblVID;
 
 
     }
