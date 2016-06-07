@@ -29,6 +29,7 @@ namespace DeviceFinder
             else if (chkHIDDevices.Checked)
                 devices = DeviceManager.Devices.GetConnectedHIDDevices(txtVID.Text, txtPID.Text);
 
+            dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = devices;
         }
 

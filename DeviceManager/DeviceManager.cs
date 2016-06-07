@@ -419,10 +419,33 @@ namespace DeviceManager
         public String Manufacturer { get; set; }
         public String ServiceName { get; set; }
 
+        /// <summary>
+        /// Device hardware manufacturer's hexadecimal Vendor ID.  This ID is common 
+        /// to all devices made by a particular manufacturer, usually assigned by the 
+        /// hardware type industry association.  Exact format varies between device types.
+        /// May be empty depending on device type.
+        /// </summary>
         public String VID { get; set; }
+
+        /// <summary>
+        /// Device hardware manufacturer's Product ID for this particular device.  This is
+        /// a vendor-assigned product code for the particular device, which can be used to
+        /// distinguish different kinds of devices from the same manufacturer.  Exact format varies
+        /// between device types.  May be empty depending on device type.
+        /// </summary>
         public String PID { get; set; }
 
+        /// <summary>
+        /// Vendor-assigned revision code used to distinguish different revisions on the same
+        /// general device from the same manucturer.  Exact format varies between device types.
+        /// May be empty if manufacturer didn't assign a revision code, or device type doesn't
+        /// support revisions.
+        /// </summary>
         public String Revision { get; set; }
+
+        /// <summary>
+        /// Interface number on composite devices (USB devices with multiple interfaces, etc.).
+        /// </summary>
         public String Interface { get; set; }
 
         #region DeviceID Parsing
@@ -436,6 +459,8 @@ namespace DeviceManager
         {
             HardwareID H = new HardwareID(DeviceID);
             this.DeviceID = DeviceID;
+            
+            Enumerator = H.Enumerator;
             VID = H.VID;
             PID = H.PID;
             Revision = H.Revision;
@@ -466,6 +491,12 @@ namespace DeviceManager
                 return Devices.Where(x => x.VID.Equals(VID) && x.PID.Equals(PID)).ToList();
         }
 
+        /// <summary>
+        /// Get a list of all currently-connected HID devices.  Calls GetDevices()
+        /// </summary>
+        /// <param name="VID">Only find USB devices with this Vendor ID</param>
+        /// <param name="PID">Only find USB devices with the given VID and this Product ID.  Ignored if VID==null</param>
+        /// <returns>List of all found devices</returns>
         static public List<DeviceInfo> GetConnectedHIDDevices(String VID = null, String PID = null)
         {
             List<DeviceInfo> Devices = GetDevices(GUID_DEVINTERFACE.GUID_DEVINTERFACE_HID, true);
@@ -519,6 +550,7 @@ namespace DeviceManager
                 while (SetupAPI.SetupDiEnumDeviceInterfaces(deviceList, ref DevInfo, ref DeviceClassGUID, InterfaceIndex, ref IntInfo))
                 {
                     DeviceInfo Info = new DeviceInfo(DevID);
+                    
                     Info.InterfaceGUID = IntInfo.classGuid;
                     Info.Instance = IntInfo.devInst;
 

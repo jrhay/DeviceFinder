@@ -33,21 +33,26 @@
             this.grpDeviceType = new System.Windows.Forms.GroupBox();
             this.chkUSBDevices = new System.Windows.Forms.RadioButton();
             this.chkHIDDevices = new System.Windows.Forms.RadioButton();
-            this.Manufacturer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Instance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FriendlyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DeviceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Service = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClassGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.InterfaceGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblVID = new System.Windows.Forms.Label();
             this.txtVID = new System.Windows.Forms.TextBox();
             this.txtPID = new System.Windows.Forms.TextBox();
             this.lblPID = new System.Windows.Forms.Label();
             this.btnScan = new System.Windows.Forms.Button();
+            this.Manufacturer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FriendlyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Location = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Interface = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Instance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Revision = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeviceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Service = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Enumerator = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClassGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.InterfaceGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.grpDevices.SuspendLayout();
             this.grpDeviceType.SuspendLayout();
@@ -62,12 +67,17 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Manufacturer,
             this.Description,
-            this.Instance,
             this.FriendlyName,
+            this.VID,
+            this.PID,
+            this.Class,
             this.Location,
+            this.Interface,
+            this.Instance,
+            this.Revision,
             this.DeviceID,
             this.Service,
-            this.Class,
+            this.Enumerator,
             this.ClassGUID,
             this.InterfaceGUID});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -133,82 +143,6 @@
             this.chkHIDDevices.UseVisualStyleBackColor = true;
             this.chkHIDDevices.CheckedChanged += new System.EventHandler(this.chkUSBDevices_CheckedChanged);
             // 
-            // Manufacturer
-            // 
-            this.Manufacturer.DataPropertyName = "Manufacturer";
-            this.Manufacturer.HeaderText = "Manufacturer";
-            this.Manufacturer.Name = "Manufacturer";
-            this.Manufacturer.ReadOnly = true;
-            this.Manufacturer.Width = 200;
-            // 
-            // Description
-            // 
-            this.Description.DataPropertyName = "Description";
-            this.Description.HeaderText = "Description";
-            this.Description.Name = "Description";
-            this.Description.ReadOnly = true;
-            this.Description.Width = 200;
-            // 
-            // Instance
-            // 
-            this.Instance.DataPropertyName = "Instance";
-            this.Instance.HeaderText = "Instance";
-            this.Instance.Name = "Instance";
-            this.Instance.ReadOnly = true;
-            this.Instance.Width = 50;
-            // 
-            // FriendlyName
-            // 
-            this.FriendlyName.DataPropertyName = "FriendlyName";
-            this.FriendlyName.HeaderText = "Friendly Name";
-            this.FriendlyName.Name = "FriendlyName";
-            this.FriendlyName.ReadOnly = true;
-            // 
-            // Location
-            // 
-            this.Location.DataPropertyName = "Location";
-            this.Location.HeaderText = "Location";
-            this.Location.Name = "Location";
-            this.Location.ReadOnly = true;
-            // 
-            // DeviceID
-            // 
-            this.DeviceID.DataPropertyName = "DeviceID";
-            this.DeviceID.HeaderText = "Device ID";
-            this.DeviceID.Name = "DeviceID";
-            this.DeviceID.ReadOnly = true;
-            this.DeviceID.Width = 300;
-            // 
-            // Service
-            // 
-            this.Service.DataPropertyName = "ServiceName";
-            this.Service.HeaderText = "Service";
-            this.Service.Name = "Service";
-            this.Service.ReadOnly = true;
-            // 
-            // Class
-            // 
-            this.Class.DataPropertyName = "Class";
-            this.Class.HeaderText = "Class";
-            this.Class.Name = "Class";
-            this.Class.ReadOnly = true;
-            // 
-            // ClassGUID
-            // 
-            this.ClassGUID.DataPropertyName = "ClassGUID";
-            this.ClassGUID.HeaderText = "Device Class";
-            this.ClassGUID.Name = "ClassGUID";
-            this.ClassGUID.ReadOnly = true;
-            this.ClassGUID.Width = 210;
-            // 
-            // InterfaceGUID
-            // 
-            this.InterfaceGUID.DataPropertyName = "InterfaceGUID";
-            this.InterfaceGUID.HeaderText = "Interface";
-            this.InterfaceGUID.Name = "InterfaceGUID";
-            this.InterfaceGUID.ReadOnly = true;
-            this.InterfaceGUID.Width = 210;
-            // 
             // lblVID
             // 
             this.lblVID.AutoSize = true;
@@ -251,6 +185,121 @@
             this.btnScan.UseVisualStyleBackColor = true;
             this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
             // 
+            // Manufacturer
+            // 
+            this.Manufacturer.DataPropertyName = "Manufacturer";
+            this.Manufacturer.HeaderText = "Manufacturer";
+            this.Manufacturer.Name = "Manufacturer";
+            this.Manufacturer.ReadOnly = true;
+            this.Manufacturer.Width = 200;
+            // 
+            // Description
+            // 
+            this.Description.DataPropertyName = "Description";
+            this.Description.HeaderText = "Description";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.Width = 200;
+            // 
+            // FriendlyName
+            // 
+            this.FriendlyName.DataPropertyName = "FriendlyName";
+            this.FriendlyName.HeaderText = "Friendly Name";
+            this.FriendlyName.Name = "FriendlyName";
+            this.FriendlyName.ReadOnly = true;
+            // 
+            // VID
+            // 
+            this.VID.DataPropertyName = "VID";
+            this.VID.HeaderText = "VID";
+            this.VID.Name = "VID";
+            this.VID.ReadOnly = true;
+            this.VID.Width = 50;
+            // 
+            // PID
+            // 
+            this.PID.DataPropertyName = "PID";
+            this.PID.HeaderText = "PID";
+            this.PID.Name = "PID";
+            this.PID.ReadOnly = true;
+            this.PID.Width = 50;
+            // 
+            // Class
+            // 
+            this.Class.DataPropertyName = "Class";
+            this.Class.HeaderText = "Class";
+            this.Class.Name = "Class";
+            this.Class.ReadOnly = true;
+            // 
+            // Location
+            // 
+            this.Location.DataPropertyName = "Location";
+            this.Location.HeaderText = "Location";
+            this.Location.Name = "Location";
+            this.Location.ReadOnly = true;
+            // 
+            // Interface
+            // 
+            this.Interface.DataPropertyName = "Interface";
+            this.Interface.HeaderText = "Interface";
+            this.Interface.Name = "Interface";
+            this.Interface.ReadOnly = true;
+            this.Interface.Width = 52;
+            // 
+            // Instance
+            // 
+            this.Instance.DataPropertyName = "Instance";
+            this.Instance.HeaderText = "Instance";
+            this.Instance.Name = "Instance";
+            this.Instance.ReadOnly = true;
+            this.Instance.Width = 50;
+            // 
+            // Revision
+            // 
+            this.Revision.DataPropertyName = "Revision";
+            this.Revision.HeaderText = "Revision";
+            this.Revision.Name = "Revision";
+            this.Revision.ReadOnly = true;
+            this.Revision.Width = 50;
+            // 
+            // DeviceID
+            // 
+            this.DeviceID.DataPropertyName = "DeviceID";
+            this.DeviceID.HeaderText = "Device ID";
+            this.DeviceID.Name = "DeviceID";
+            this.DeviceID.ReadOnly = true;
+            this.DeviceID.Width = 300;
+            // 
+            // Service
+            // 
+            this.Service.DataPropertyName = "ServiceName";
+            this.Service.HeaderText = "Service";
+            this.Service.Name = "Service";
+            this.Service.ReadOnly = true;
+            // 
+            // Enumerator
+            // 
+            this.Enumerator.DataPropertyName = "Enumerator";
+            this.Enumerator.HeaderText = "Enumerator";
+            this.Enumerator.Name = "Enumerator";
+            this.Enumerator.ReadOnly = true;
+            // 
+            // ClassGUID
+            // 
+            this.ClassGUID.DataPropertyName = "ClassGUID";
+            this.ClassGUID.HeaderText = "Device Class";
+            this.ClassGUID.Name = "ClassGUID";
+            this.ClassGUID.ReadOnly = true;
+            this.ClassGUID.Width = 210;
+            // 
+            // InterfaceGUID
+            // 
+            this.InterfaceGUID.DataPropertyName = "InterfaceGUID";
+            this.InterfaceGUID.HeaderText = "Interface Type (GUID)";
+            this.InterfaceGUID.Name = "InterfaceGUID";
+            this.InterfaceGUID.ReadOnly = true;
+            this.InterfaceGUID.Width = 210;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,21 +324,26 @@
         private System.Windows.Forms.GroupBox grpDeviceType;
         private System.Windows.Forms.RadioButton chkUSBDevices;
         private System.Windows.Forms.RadioButton chkHIDDevices;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Manufacturer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Instance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FriendlyName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Location;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DeviceID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Service;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Class;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClassGUID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn InterfaceGUID;
         private System.Windows.Forms.Button btnScan;
         private System.Windows.Forms.TextBox txtPID;
         private System.Windows.Forms.Label lblPID;
         private System.Windows.Forms.TextBox txtVID;
         private System.Windows.Forms.Label lblVID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Manufacturer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FriendlyName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn VID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Class;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Location;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Interface;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Instance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Revision;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DeviceID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Service;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Enumerator;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClassGUID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn InterfaceGUID;
 
 
     }

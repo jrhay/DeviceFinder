@@ -2,4 +2,3 @@ C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceManager\bin\Debug\Device
 C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceManager\bin\Debug\DeviceManager.pdb
 C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceManager\obj\Debug\DeviceManager.dll
 C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceManager\obj\Debug\DeviceManager.pdb
-C:\Users\Juell3D\Documents\PortableK\DeviceFinder\DeviceManager\obj\Debug\DeviceManager.csprojResolveAssemblyReference.cache
