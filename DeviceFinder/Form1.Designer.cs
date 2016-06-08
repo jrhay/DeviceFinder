@@ -31,13 +31,13 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.grpDevices = new System.Windows.Forms.GroupBox();
             this.grpDeviceType = new System.Windows.Forms.GroupBox();
-            this.chkUSBDevices = new System.Windows.Forms.RadioButton();
-            this.chkHIDDevices = new System.Windows.Forms.RadioButton();
-            this.lblVID = new System.Windows.Forms.Label();
-            this.txtVID = new System.Windows.Forms.TextBox();
+            this.btnScan = new System.Windows.Forms.Button();
             this.txtPID = new System.Windows.Forms.TextBox();
             this.lblPID = new System.Windows.Forms.Label();
-            this.btnScan = new System.Windows.Forms.Button();
+            this.txtVID = new System.Windows.Forms.TextBox();
+            this.lblVID = new System.Windows.Forms.Label();
+            this.chkHIDDevices = new System.Windows.Forms.RadioButton();
+            this.chkUSBDevices = new System.Windows.Forms.RadioButton();
             this.Manufacturer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FriendlyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,6 +49,7 @@
             this.Instance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Revision = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviceID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DevicePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Service = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Enumerator = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClassGUID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,6 +77,7 @@
             this.Instance,
             this.Revision,
             this.DeviceID,
+            this.DevicePath,
             this.Service,
             this.Enumerator,
             this.ClassGUID,
@@ -119,45 +121,15 @@
             this.grpDeviceType.TabStop = false;
             this.grpDeviceType.Text = "Device Type";
             // 
-            // chkUSBDevices
+            // btnScan
             // 
-            this.chkUSBDevices.AutoSize = true;
-            this.chkUSBDevices.Checked = true;
-            this.chkUSBDevices.Location = new System.Drawing.Point(27, 32);
-            this.chkUSBDevices.Name = "chkUSBDevices";
-            this.chkUSBDevices.Size = new System.Drawing.Size(103, 17);
-            this.chkUSBDevices.TabIndex = 0;
-            this.chkUSBDevices.TabStop = true;
-            this.chkUSBDevices.Text = "All USB Devices";
-            this.chkUSBDevices.UseVisualStyleBackColor = true;
-            this.chkUSBDevices.CheckedChanged += new System.EventHandler(this.chkUSBDevices_CheckedChanged);
-            // 
-            // chkHIDDevices
-            // 
-            this.chkHIDDevices.AutoSize = true;
-            this.chkHIDDevices.Location = new System.Drawing.Point(153, 32);
-            this.chkHIDDevices.Name = "chkHIDDevices";
-            this.chkHIDDevices.Size = new System.Drawing.Size(86, 17);
-            this.chkHIDDevices.TabIndex = 1;
-            this.chkHIDDevices.Text = "HID Devices";
-            this.chkHIDDevices.UseVisualStyleBackColor = true;
-            this.chkHIDDevices.CheckedChanged += new System.EventHandler(this.chkUSBDevices_CheckedChanged);
-            // 
-            // lblVID
-            // 
-            this.lblVID.AutoSize = true;
-            this.lblVID.Location = new System.Drawing.Point(267, 18);
-            this.lblVID.Name = "lblVID";
-            this.lblVID.Size = new System.Drawing.Size(25, 13);
-            this.lblVID.TabIndex = 2;
-            this.lblVID.Text = "VID";
-            // 
-            // txtVID
-            // 
-            this.txtVID.Location = new System.Drawing.Point(298, 15);
-            this.txtVID.Name = "txtVID";
-            this.txtVID.Size = new System.Drawing.Size(47, 20);
-            this.txtVID.TabIndex = 3;
+            this.btnScan.Location = new System.Drawing.Point(375, 26);
+            this.btnScan.Name = "btnScan";
+            this.btnScan.Size = new System.Drawing.Size(125, 23);
+            this.btnScan.TabIndex = 6;
+            this.btnScan.Text = "Scan for Devices";
+            this.btnScan.UseVisualStyleBackColor = true;
+            this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
             // 
             // txtPID
             // 
@@ -175,15 +147,45 @@
             this.lblPID.TabIndex = 4;
             this.lblPID.Text = "PID";
             // 
-            // btnScan
+            // txtVID
             // 
-            this.btnScan.Location = new System.Drawing.Point(375, 26);
-            this.btnScan.Name = "btnScan";
-            this.btnScan.Size = new System.Drawing.Size(125, 23);
-            this.btnScan.TabIndex = 6;
-            this.btnScan.Text = "Scan for Devices";
-            this.btnScan.UseVisualStyleBackColor = true;
-            this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
+            this.txtVID.Location = new System.Drawing.Point(298, 15);
+            this.txtVID.Name = "txtVID";
+            this.txtVID.Size = new System.Drawing.Size(47, 20);
+            this.txtVID.TabIndex = 3;
+            // 
+            // lblVID
+            // 
+            this.lblVID.AutoSize = true;
+            this.lblVID.Location = new System.Drawing.Point(267, 18);
+            this.lblVID.Name = "lblVID";
+            this.lblVID.Size = new System.Drawing.Size(25, 13);
+            this.lblVID.TabIndex = 2;
+            this.lblVID.Text = "VID";
+            // 
+            // chkHIDDevices
+            // 
+            this.chkHIDDevices.AutoSize = true;
+            this.chkHIDDevices.Location = new System.Drawing.Point(153, 32);
+            this.chkHIDDevices.Name = "chkHIDDevices";
+            this.chkHIDDevices.Size = new System.Drawing.Size(86, 17);
+            this.chkHIDDevices.TabIndex = 1;
+            this.chkHIDDevices.Text = "HID Devices";
+            this.chkHIDDevices.UseVisualStyleBackColor = true;
+            this.chkHIDDevices.CheckedChanged += new System.EventHandler(this.chkUSBDevices_CheckedChanged);
+            // 
+            // chkUSBDevices
+            // 
+            this.chkUSBDevices.AutoSize = true;
+            this.chkUSBDevices.Checked = true;
+            this.chkUSBDevices.Location = new System.Drawing.Point(27, 32);
+            this.chkUSBDevices.Name = "chkUSBDevices";
+            this.chkUSBDevices.Size = new System.Drawing.Size(103, 17);
+            this.chkUSBDevices.TabIndex = 0;
+            this.chkUSBDevices.TabStop = true;
+            this.chkUSBDevices.Text = "All USB Devices";
+            this.chkUSBDevices.UseVisualStyleBackColor = true;
+            this.chkUSBDevices.CheckedChanged += new System.EventHandler(this.chkUSBDevices_CheckedChanged);
             // 
             // Manufacturer
             // 
@@ -270,6 +272,14 @@
             this.DeviceID.ReadOnly = true;
             this.DeviceID.Width = 300;
             // 
+            // DevicePath
+            // 
+            this.DevicePath.DataPropertyName = "DevicePath";
+            this.DevicePath.HeaderText = "DevicePath";
+            this.DevicePath.Name = "DevicePath";
+            this.DevicePath.ReadOnly = true;
+            this.DevicePath.Width = 250;
+            // 
             // Service
             // 
             this.Service.DataPropertyName = "ServiceName";
@@ -340,6 +350,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Instance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Revision;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviceID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DevicePath;
         private System.Windows.Forms.DataGridViewTextBoxColumn Service;
         private System.Windows.Forms.DataGridViewTextBoxColumn Enumerator;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClassGUID;

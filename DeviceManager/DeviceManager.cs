@@ -403,6 +403,8 @@ namespace DeviceManager
 
     public class DeviceInfo
     {
+        public String DevicePath { get; set; }
+
         public String DeviceID { get; set; }
         public Guid ClassGUID { get; set; }
         public Guid InterfaceGUID { get; set; }
@@ -550,7 +552,11 @@ namespace DeviceManager
                 while (SetupAPI.SetupDiEnumDeviceInterfaces(deviceList, ref DevInfo, ref DeviceClassGUID, InterfaceIndex, ref IntInfo))
                 {
                     DeviceInfo Info = new DeviceInfo(DevID);
-                    
+
+                    Info.DevicePath = SetupAPI.GetDeviceInterfacePath(deviceList, ref DevInfo, ref IntInfo);
+                    if (String.IsNullOrEmpty(Info.DevicePath))
+                        throw new Win32Exception();
+
                     Info.InterfaceGUID = IntInfo.classGuid;
                     Info.Instance = IntInfo.devInst;
 

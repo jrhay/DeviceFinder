@@ -40,14 +40,46 @@ namespace DeviceManager
         #region GetDeviceInterfaceDetail
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern Boolean SetupDiGetDeviceInterfaceDetail(
+        internal static extern Boolean SetupDiGetDeviceInterfaceDetail(
            IntPtr hDevInfo,
            ref SP_DEVINFO_DATA deviceInterfaceData,
-           ref SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData,
-           UInt32 deviceInterfaceDetailDataSize,
-           IntPtr requiredSize,
+           IntPtr deviceInterfaceDetailData,
+           int deviceInterfaceDetailDataSize,
+           ref UInt32 requiredSize,
            ref SP_DEVINFO_DATA deviceInfoData
         );
+
+        public static String GetDeviceInterfacePath(IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA devInfo, ref SP_DEVINFO_DATA deviceInterfaceData)
+        {
+            String devicePath = null;
+            IntPtr detailData = IntPtr.Zero;
+            UInt32 detailSize = 0;
+
+            SetupDiGetDeviceInterfaceDetail(DeviceInfoSet, ref deviceInterfaceData, detailData, 0, ref detailSize, ref devInfo);
+            if (detailSize > 0)
+            {
+                //int structSize = Marshal.SizeOf(typeof(UInt32)) + Marshal.SystemDefaultCharSize + Marshal.SystemDefaultCharSize;
+                int structSize = Marshal.SystemDefaultCharSize;
+                if (IntPtr.Size == 8)
+                    structSize += 6;  // 64-bit systems, with 8-byte packing
+                else
+                    structSize += 4; // 32-bit systems, with byte packing
+                detailData = Marshal.AllocHGlobal((int)detailSize + structSize);
+                Marshal.WriteInt32(detailData, (int)structSize);
+                Boolean Success = SetupDiGetDeviceInterfaceDetail(DeviceInfoSet, ref deviceInterfaceData, detailData, (int)detailSize, ref detailSize, ref devInfo);
+                if (Success)
+                {
+                    devicePath = Marshal.PtrToStringUni(new IntPtr(detailData.ToInt64() + 4));
+                }
+                else
+                {
+                }
+                Marshal.FreeHGlobal(detailData);
+            }
+
+            return devicePath;
+        }
+
 
         #endregion
 
