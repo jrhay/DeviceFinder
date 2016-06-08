@@ -58,21 +58,18 @@ namespace DeviceManager
             SetupDiGetDeviceInterfaceDetail(DeviceInfoSet, ref deviceInterfaceData, detailData, 0, ref detailSize, ref devInfo);
             if (detailSize > 0)
             {
-                //int structSize = Marshal.SizeOf(typeof(UInt32)) + Marshal.SystemDefaultCharSize + Marshal.SystemDefaultCharSize;
                 int structSize = Marshal.SystemDefaultCharSize;
                 if (IntPtr.Size == 8)
                     structSize += 6;  // 64-bit systems, with 8-byte packing
                 else
                     structSize += 4; // 32-bit systems, with byte packing
+
                 detailData = Marshal.AllocHGlobal((int)detailSize + structSize);
                 Marshal.WriteInt32(detailData, (int)structSize);
                 Boolean Success = SetupDiGetDeviceInterfaceDetail(DeviceInfoSet, ref deviceInterfaceData, detailData, (int)detailSize, ref detailSize, ref devInfo);
                 if (Success)
                 {
                     devicePath = Marshal.PtrToStringUni(new IntPtr(detailData.ToInt64() + 4));
-                }
-                else
-                {
                 }
                 Marshal.FreeHGlobal(detailData);
             }
