@@ -3,3 +3,5 @@ DeviceManager/bin/
 DeviceManager/obj/
 DeviceFinder/obj/
 *.cache
+RFIDDeviceManager/bin/
+RFIDDeviceManager/obj/

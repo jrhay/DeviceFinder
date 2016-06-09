@@ -22,6 +22,9 @@ namespace RFIDDeviceManager
         public void Show(SkyetekRFID Device)
         {
             _Device = Device;
+
+            Device.GetParameterValue(0);
+
             this.Show();
         }
     }
