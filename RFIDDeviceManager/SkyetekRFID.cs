@@ -110,16 +110,27 @@ namespace RFIDDeviceManager
 
         #region STPv3 Requests (Commands)
 
-        /*
-         *             public static STPv3Command READ_SYSTEM_PARAMETER = new STPv3Command(0x1201, "Read System Parameter", 300, false, true, false);
-            public static STPv3Command WRITE_SYSTEM_PARAMETER = new STPv3Command(0x1202, "Write System Parameter", 300, false, true, true);
-
-            public static STPv3Command STORE_DEFAULT_SYSTEM_PARAMETER = new STPv3Command(0x1301, "Store Default System Parameter", 300, false, true, true);
-            public static STPv3Command RETRIEVE_DEFAULT_SYSTEM_PARAMETER = new STPv3Command(0x1302, "Retrieve Default System Parameter", 300, false, true, false);
-*/
-
-        enum Command : ushort
+        public enum Command : ushort
         {
+            // These "commands" are extended error messages from response codes
+            InvalidTagType = 0x0001,        // Invalid tag type for the command specified
+            NoTagInField = 0x0002,          // No tag detected
+            CollisionDetected = 0x0003,     // Multiple tags in the field have the same tag ID
+            TagDataIntegrityFail = 0x0004,  // Response from the tag failed the CRC check
+            TagBlocksLocked = 0x0005,       // Locked block prevented write operation
+            TagNotAuthenticated = 0x0006,   // Tag operation failed because tag not authenticated
+            TagNotInField = 0x0007,         // Specified tag not found in the field
+            DataRateNotSupported = 0x000B,  // Bit rate not supported by reader, tag, or both (Tag to Reader)
+            DataRateNotSupported2 = 0x000C, // Bit rate not supported by reader, tag, or both (Reader to Tag)
+            DecryptTagDataFail = 0x000D,    // Data read from the tag corrupted or improperly decrypted
+            InvalidSignature = 0x000E,      // HMAC written to tag did not match the data and key
+            InvalidAuthentication = 0x000F, // Key number does not exist or is not valid for authentication with a specific reader or tag
+            NoApplicationPresent = 0x0010,  // Application specified could not be found
+            FileNotFound = 0x0011,          // Specified file was not found on the application
+            NoFileSelected = 0x0012,        // Command requires a file but none was selected
+            InvalidKeyNumber = 0x0013,      // Key number does not exist or is out of the range of valid keys
+            InvalidKeyLength = 0x0014,      // Key length not valid for the tag type, command, or reader
+
             ReadParameter  = 0x1201,
             WriteParameter = 0x1202,
             StoreDefaultParameter = 0x1301,
@@ -129,7 +140,7 @@ namespace RFIDDeviceManager
         /// <summary>
         /// Class used to build up and manipulate a STPv3 Request to the RFID device
         /// </summary>
-        class Request
+        public class Request
         {
             private Command Code = 0x0;   // Command to device
             private Flag Flags = 0x0;   // Flags for command
@@ -202,6 +213,12 @@ namespace RFIDDeviceManager
                 return ToString(false);
             }
 
+            /// <summary>
+            /// Return an ASCII hex representation of the request, formatted correctly for sending
+            /// to an RFID device in ASCII mode (if requested)
+            /// </summary>
+            /// <param name="FormatRequest">Format the request for sending to an ASCII mode device?</param>
+            /// <returns>ASCII hex representation of the request</returns>
             public string ToString(Boolean FormatRequest)
             {
                 StringBuilder Str = new StringBuilder(10);
@@ -229,7 +246,11 @@ namespace RFIDDeviceManager
                 return Str.ToString();
             }
 
-            // Return the binary-mode request byte stream
+            /// <summary>
+            /// Return binary representation of the request, as it should be sent to an RFID device
+            /// (MSB first for commands, etc.)
+            /// </summary>
+            /// <returns>Current byte stream representation of the request</returns>
             public Byte[] ToBytes()
             {
                 List<Byte> bytes = new List<byte>();
@@ -290,6 +311,12 @@ namespace RFIDDeviceManager
                 return bytes.ToArray();
             }
 
+            /// <summary>
+            /// Calculate a CRC16 over a list of bytes
+            /// </summary>
+            /// <param name="Preset">Seed value for CRC, may be partially-computed value</param>
+            /// <param name="bytes">List of bytes to calculate CRC16 for</param>
+            /// <returns>Calculated CRC16</returns>
             private UInt16 CRC16(UInt16 Preset, List<Byte> bytes)
             {
                 UInt16 CRC = Preset;
@@ -495,6 +522,57 @@ namespace RFIDDeviceManager
 
         #endregion
 
+        #region STPv3 Responses
+
+        public class Response
+        {
+            private Boolean _Success = false;
+            /// <summary>
+            /// Was the request successful?
+            /// </summary>
+            public Boolean Success { get { return _Success; } }
+            
+            private Command _Code = 0x0;     
+            /// <summary>
+            /// Command code for the request this is a response to
+            /// </summary>
+            public Command Code { get { return _Code; } }
+
+            private UInt32 RID = 0x0;
+            private UInt16 TagType = 0x0;
+            private Byte[] Data = null;
+
+            private void StoreCommandSuccess(UInt16 ResponseCode)
+            {
+                this._Success = ((ResponseCode & 0x08000) == 0);
+                this._Code = (Command)(ResponseCode & ~0x08000);
+            }
+
+            /// <summary>
+            /// Attempt to parse a byte stream as a response from the RFID device
+            /// </summary>
+            /// <param name="ResponseBytes">Byte stream to parse as a response</param>
+            /// <returns>True if bytes parsed successfully (regardless of response status)</returns>
+            private Boolean ParseResponse(Byte[] ResponseBytes)
+            {
+                if (ResponseBytes.Count() < 4)
+                    return false;  // Not enough bytes to be a valid response
+
+                UInt16 Length = (UInt16)((UInt16)(ResponseBytes[1] << 8) | (UInt16)(ResponseBytes[0]));
+                if (Length != ResponseBytes.Count() - 2)
+                    return false; // Encoded length of response not equal to number of bytes of response
+
+                UInt16 ResponseCode = (UInt16)((UInt16)(ResponseBytes[3] << 8) | (UInt16)(ResponseBytes[2]));
+                StoreCommandSuccess(ResponseCode);
+
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Lifecycle
+
         /// <summary>
         /// Is this instance valid and ready to be used?
         /// </summary>
@@ -530,6 +608,8 @@ namespace RFIDDeviceManager
 
             return Device;
         }
+
+        #endregion
 
         #region Basic Command Request/Response
 
